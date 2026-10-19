@@ -1,10 +1,541 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Top Tier 300+ CBT</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top Tier 300+ | Physics Mock Test</title>
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #415a77 100%);
+      --card-bg: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.18);
+      --accent-blue: #00f0ff;
+      --accent-glow: rgba(0, 240, 255, 0.4);
+      --btn-gradient: linear-gradient(90deg, #0077b6, #00f0ff);
+      --text-main: #ffffff;
+      --text-muted: #e0e1dd;
+      --correct-bg: rgba(46, 204, 113, 0.2);
+      --incorrect-bg: rgba(231, 76, 60, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 15px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(180deg, #ffffff 0%, var(--accent-blue) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 15px var(--accent-glow);
+      letter-spacing: 1px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 5px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 650px;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    /* Screen Management */
+    .screen {
+      display: none;
+    }
+    .screen.active {
+      display: block;
+    }
+
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      background: rgba(0, 0, 0, 0.25);
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: var(--btn-gradient);
+      color: #0d1b2a;
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Quiz Screen Styles */
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .progress-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .question-title {
+      font-size: 1.15rem;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .option-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: var(--text-main);
+      text-align: left;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .option-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .option-btn.selected {
+      background: rgba(0, 240, 255, 0.2);
+      border-color: var(--accent-blue);
+    }
+
+    /* Leaderboard Styles */
+    .score-summary {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .score-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid var(--accent-blue);
+      margin: 0 auto 15px auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .score-number {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .score-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .leaderboard-title {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      text-align: center;
+      color: var(--accent-blue);
+    }
+
+    .leaderboard-list {
+      list-style: none;
+      margin-bottom: 25px;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 15px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      border: 1px solid transparent;
+    }
+
+    .leaderboard-item.highlight {
+      border-color: var(--accent-blue);
+      background: rgba(0, 240, 255, 0.1);
+    }
+
+    .candidate-rank {
+      font-weight: bold;
+      width: 25px;
+    }
+
+    .candidate-name {
+      flex-grow: 1;
+      padding-left: 10px;
+    }
+
+    .candidate-percentage {
+      font-weight: bold;
+      color: var(--accent-blue);
+    }
+
+    .review-section {
+      margin-top: 25px;
+      border-top: 1px solid var(--card-border);
+      padding-top: 20px;
+    }
+
+    .review-item {
+      margin-bottom: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .review-correct {
+      background: var(--correct-bg);
+      border-left: 4px solid #2ecc71;
+    }
+
+    .review-incorrect {
+      background: var(--incorrect-bg);
+      border-left: 4px solid #e74c3c;
+    }
+  </style>
 </head>
 <body>
-    <h1>Welcome to Top Tier 300+ CBT Portal</h1>
-    <p>Preparing for 300+ made easy!</p>
+
+  <header>
+    <h1>TOP TIER 300+</h1>
+    <p>Physics CBT Mock Portal</p>
+  </header>
+
+  <div class="container">
+    
+    <!-- STEP 1: Candidate Name Entry -->
+    <div id="start-screen" class="screen active">
+      <div class="form-group">
+        <label for="candidate-name">Enter Full Name:</label>
+        <input type="text" id="candidate-name" placeholder="e.g. John Doe" autocomplete="off">
+      </div>
+      <button class="btn" onclick="startQuiz()">Start Test</button>
+    </div>
+
+    <!-- STEP 2: Quiz Screen -->
+    <div id="quiz-screen" class="screen">
+      <div class="quiz-header">
+        <span id="candidate-display" style="font-weight:600;">Candidate Name</span>
+        <span id="progress-indicator" class="progress-text">Question 1 / 10</span>
+      </div>
+
+      <div class="question-title" id="question-text">Question text goes here...</div>
+
+      <div class="options-container" id="options-box">
+        <!-- Options generated dynamically -->
+      </div>
+
+      <button class="btn" id="next-btn" onclick="nextQuestion()">Next Question</button>
+    </div>
+
+    <!-- STEP 3: Results & Leaderboard Screen -->
+    <div id="result-screen" class="screen">
+      <div class="score-summary">
+        <div class="score-circle">
+          <span class="score-number" id="final-percentage">0%</span>
+          <span class="score-label" id="final-score">0 / 10</span>
+        </div>
+        <h2 id="feedback-message">Great Job!</h2>
+      </div>
+
+      <h3 class="leaderboard-title">🏆 Candidate Leaderboard</h3>
+      <ul class="leaderboard-list" id="leaderboard-container">
+        <!-- Leaderboard items inserted dynamically -->
+      </ul>
+
+      <button class="btn" onclick="retakeTest()">Retake Test</button>
+
+      <div class="review-section">
+        <h3 style="margin-bottom: 15px; text-align: center;">Answers Breakdown</h3>
+        <div id="review-container"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "1. A car accelerates uniformly from rest to a velocity of 20 m/s in 5 seconds. What is its acceleration?",
+        options: ["2 m/s²", "4 m/s²", "5 m/s²", "10 m/s²"],
+        answer: 1,
+        explanation: "Acceleration = (Final Velocity - Initial Velocity) / Time = (20 - 0) / 5 = 4 m/s²."
+      },
+      {
+        question: "2. Which of the following is a scalar quantity?",
+        options: ["Velocity", "Displacement", "Mass", "Acceleration"],
+        answer: 2,
+        explanation: "Mass has magnitude only and no direction, making it a scalar quantity."
+      },
+      {
+        question: "3. What is the unit of electrical resistance?",
+        options: ["Volt", "Ampere", "Ohm", "Watt"],
+        answer: 2,
+        explanation: "Electrical resistance is measured in Ohms (Ω)."
+      },
+      {
+        question: "4. The force that opposes the relative motion between two surfaces in contact is known as:",
+        options: ["Gravitational Force", "Friction", "Tension", "Centripetal Force"],
+        answer: 1,
+        explanation: "Friction acts parallel to contacting surfaces to oppose sliding motion."
+      },
+      {
+        question: "5. An object of mass 2 kg is lifted vertically through a height of 5 m. Calculate the work done (g = 10 m/s²).",
+        options: ["10 J", "50 J", "100 J", "200 J"],
+        answer: 2,
+        explanation: "Work Done = m * g * h = 2 * 10 * 5 = 100 Joules."
+      },
+      {
+        question: "6. Which electromagnetic wave has the shortest wavelength?",
+        options: ["Radio waves", "Microwaves", "Gamma rays", "Infrared"],
+        answer: 2,
+        explanation: "Gamma rays have the highest frequency and shortest wavelength in the EM spectrum."
+      },
+      {
+        question: "7. Heat transfer through a solid material without actual movement of its particles is called:",
+        options: ["Conduction", "Convection", "Radiation", "Evaporation"],
+        answer: 0,
+        explanation: "Conduction transfers heat through particle vibrations in solids."
+      },
+      {
+        question: "8. Pressure in a liquid depends on which of the following parameters?",
+        options: ["Area of container", "Density and depth", "Mass of liquid only", "Shape of container"],
+        answer: 1,
+        explanation: "Liquid Pressure = height (depth) × density × gravity (P = hρg)."
+      },
+      {
+        question: "9. The boiling point of pure water at standard atmospheric pressure is:",
+        options: ["0°C", "37°C", "100°C", "273°C"],
+        answer: 2,
+        explanation: "Water boils at 100°C under normal atmospheric pressure."
+      },
+      {
+        question: "10. Hooke's Law states that within the elastic limit, stress is directly proportional to:",
+        options: ["Force", "Strain", "Length", "Area"],
+        answer: 1,
+        explanation: "Hooke's Law states Stress ∝ Strain (or Force ∝ Extension)."
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+    let selectedAnswers = new Array(questions.length).fill(null);
+    let currentCandidate = "";
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function startQuiz() {
+      const nameInput = document.getElementById('candidate-name').value.trim();
+      if (!nameInput) {
+        alert("Please enter your name to start!");
+        return;
+      }
+      currentCandidate = nameInput;
+      document.getElementById('candidate-display').innerText = currentCandidate;
+      currentQuestionIndex = 0;
+      selectedAnswers = new Array(questions.length).fill(null);
+      showScreen('quiz-screen');
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const q = questions[currentQuestionIndex];
+      document.getElementById('progress-indicator').innerText = `Question ${currentQuestionIndex + 1} / ${questions.length}`;
+      document.getElementById('question-text').innerText = q.question;
+
+      const optionsBox = document.getElementById('options-box');
+      optionsBox.innerHTML = '';
+
+      q.options.forEach((opt, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        if (selectedAnswers[currentQuestionIndex] === index) {
+          btn.classList.add('selected');
+        }
+        btn.innerText = opt;
+        btn.onclick = () => selectOption(index);
+        optionsBox.appendChild(btn);
+      });
+
+      const nextBtn = document.getElementById('next-btn');
+      if (currentQuestionIndex === questions.length - 1) {
+        nextBtn.innerText = "Submit Test";
+      } else {
+        nextBtn.innerText = "Next Question";
+      }
+    }
+
+    function selectOption(index) {
+      selectedAnswers[currentQuestionIndex] = index;
+      loadQuestion();
+    }
+
+    function nextQuestion() {
+      if (selectedAnswers[currentQuestionIndex] === null) {
+        alert("Please select an answer before proceeding!");
+        return;
+      }
+
+      if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        loadQuestion();
+      } else {
+        calculateAndDisplayResults();
+      }
+    }
+
+    function calculateAndDisplayResults() {
+      let score = 0;
+      questions.forEach((q, idx) => {
+        if (selectedAnswers[idx] === q.answer) {
+          score++;
+        }
+      });
+
+      const percentage = Math.round((score / questions.length) * 100);
+
+      document.getElementById('final-percentage').innerText = percentage + "%";
+      document.getElementById('final-score').innerText = `${score} / ${questions.length}`;
+
+      // Save to Leaderboard
+      saveLeaderboard(currentCandidate, percentage, score);
+      renderLeaderboard();
+      renderReview();
+
+      showScreen('result-screen');
+    }
+
+    function saveLeaderboard(name, percentage, score) {
+      let leaderboard = JSON.parse(localStorage.getItem('topTierLeaderboard')) || [];
+      leaderboard.push({ name, percentage, score, date: new Date().toLocaleTimeString() });
+      
+      // Sort highest to lowest percentage
+      leaderboard.sort((a, b) => b.percentage - a.percentage);
+
+      localStorage.setItem('topTierLeaderboard', JSON.stringify(leaderboard));
+    }
+
+    function renderLeaderboard() {
+      const leaderboard = JSON.parse(localStorage.getItem('topTierLeaderboard')) || [];
+      const container = document.getElementById('leaderboard-container');
+      container.innerHTML = '';
+
+      leaderboard.forEach((entry, idx) => {
+        const li = document.createElement('li');
+        li.className = 'leaderboard-item';
+        if (entry.name === currentCandidate) {
+          li.classList.add('highlight');
+        }
+        li.innerHTML = `
+          <span class="candidate-rank">#${idx + 1}</span>
+          <span class="candidate-name">${entry.name}</span>
+          <span class="candidate-percentage">${entry.percentage}%</span>
+        `;
+        container.appendChild(li);
+      });
+    }
+
+    function renderReview() {
+      const container = document.getElementById('review-container');
+      container.innerHTML = '';
+
+      questions.forEach((q, idx) => {
+        const userChoice = selectedAnswers[idx];
+        const isCorrect = userChoice === q.answer;
+
+        const div = document.createElement('div');
+        div.className = `review-item ${isCorrect ? 'review-correct' : 'review-incorrect'}`;
+        div.innerHTML = `
+          <strong>Q${idx + 1}: ${q.question}</strong><br>
+          <span>Your Answer: ${userChoice !== null ? q.options[userChoice] : 'None'}</span><br>
+          <span>Correct Answer: ${q.options[q.answer]}</span><br>
+          <em style="color: var(--text-muted); font-size: 0.85rem;">Note: ${q.explanation}</em>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function retakeTest() {
+      document.getElementById('candidate-name').value = '';
+      showScreen('start-screen');
+    }
+  </script>
 </body>
-</html>
+    </html>
